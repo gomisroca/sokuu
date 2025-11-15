@@ -1,17 +1,16 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import Link from "next/link";
+import { useGSAP } from "@/app/gsap/setup";
 
-gsap.registerPlugin(ScrollTrigger);
+import Link from "next/link";
 
 export default function AboutPage() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
+  useGSAP(
+    () => {
       gsap.from(sectionRef.current, {
         opacity: 0,
         y: 150,
@@ -22,10 +21,9 @@ export default function AboutPage() {
           start: "top 80%",
         },
       });
-    });
-
-    return () => ctx.revert();
-  }, []);
+    },
+    { scope: sectionRef }
+  );
 
   return (
     <main className="p-10 min-h-[200vh]">
