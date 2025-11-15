@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
+import NavPanel from "./ui/nav-panel";
 
 export const metadata: Metadata = {
   title: "SOKUU",
@@ -12,8 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="bg-neutral-950 text-white">{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-lime-400 dark:bg-amber-400">
+        <ThemeProvider attribute="class">
+          <NavPanel />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

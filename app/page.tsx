@@ -2,19 +2,12 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 export default function HomePage() {
   const [hovered, setHovered] = useState<"left" | "right" | null>(null);
 
   return (
     <main className="h-screen flex flex-col">
-      <nav className="p-6 flex gap-6 text-xl">
-        <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
-        <Link href="/contact">Contact</Link>
-      </nav>
-
       <div className="flex grow overflow-hidden">
         {/* LEFT */}
         <motion.div
