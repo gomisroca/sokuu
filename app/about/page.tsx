@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import gsap from "gsap";
-import { useGSAP } from "@/app/gsap/setup";
+import { useGSAP } from "@/gsap/setup";
 
 import Link from "next/link";
 
