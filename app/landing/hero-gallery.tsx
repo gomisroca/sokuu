@@ -1,6 +1,7 @@
 "use client";
 
 import { useGSAP, gsap } from "@/gsap/setup";
+import Image from "next/image";
 import { useRef } from "react";
 
 export default function HeroGallery() {
@@ -18,10 +19,10 @@ export default function HeroGallery() {
     sections.forEach((section, index) => {
       gsap.fromTo(
         section,
-        { autoAlpha: 0, scale: 0.85 },
+        { autoAlpha: 0, y: "100vh" },
         {
           autoAlpha: 1,
-          scale: 1,
+          y: 0,
           ease: "power2.out",
           scrollTrigger: {
             trigger: "#gallery-trigger",
@@ -40,7 +41,7 @@ export default function HeroGallery() {
       .forEach((section, index) => {
         gsap.to(section, {
           autoAlpha: 0,
-          scale: 0.85,
+          y: "100vh",
           ease: "power2.in",
           scrollTrigger: {
             trigger: "#gallery-trigger",
@@ -67,23 +68,23 @@ export default function HeroGallery() {
       >
         <div
           id="gallery-section"
-          className="flex-1 flex items-center justify-center border bg-orange-500"
+          className="flex-1 flex items-center justify-center bg-orange-500"
         >
-          Hello 1
+          <Image fill src="https://picsum.photos/900?1" alt="Gallery 1" />
         </div>
 
         <div
           id="gallery-section"
-          className="flex-1 flex items-center justify-center border bg-sky-500"
+          className="flex-1 flex items-center justify-center bg-sky-500"
         >
-          Hello 2
+          <Image fill src="https://picsum.photos/900?2" alt="Gallery 2" />
         </div>
 
         <div
           id="gallery-section"
-          className="flex-1 flex items-center justify-center border bg-rose-500"
+          className="flex-1 flex items-center justify-center bg-rose-500"
         >
-          Hello 3
+          <Image fill src="https://picsum.photos/900?3" alt="Gallery 3" />
         </div>
       </div>
     </>
