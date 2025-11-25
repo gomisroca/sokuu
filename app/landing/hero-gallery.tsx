@@ -9,8 +9,8 @@ export default function HeroGallery() {
   useGSAP(() => {
     const sections = gsap.utils.toArray<HTMLElement>("#gallery-section");
 
-    const fadeInOffset = 75; // vh per section for fade-in
-    const fadeOutOffset = 150; // vh per section for fade-out
+    const fadeInOffset = 150; // vh per section for fade-in
+    const fadeOutOffset = 250; // vh per section for fade-out
     const fadeDistance = 200; // how far each fade happens
     const fadeOutDelay = 1000; // extra scroll before fade-out starts
 
