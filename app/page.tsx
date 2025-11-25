@@ -1,7 +1,8 @@
 "use client";
 
 import { gsap } from "@/gsap/setup";
-import Hero from "./landing/hero";
+import HeroText from "./landing/hero-text";
+import HeroGallery from "./landing/hero-gallery";
 
 export default function HomePage() {
   const handleClick = (
@@ -12,7 +13,12 @@ export default function HomePage() {
 
   return (
     <main className="flex flex-col">
-      <Hero />
+      {/* HERO SECTION */}
+      <HeroText />
+      <HeroGallery />
+
+      {/* Optional extra scroll space for the last gallery sections */}
+      <div className="h-[200vh]" />
       <button onClick={handleClick}>Click me</button>
     </main>
   );
