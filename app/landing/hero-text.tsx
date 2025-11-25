@@ -1,18 +1,11 @@
 "use client";
 
 import { useGSAP, gsap, SplitText } from "@/gsap/setup";
-import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
-
-const Gallery = dynamic(() => import("./gallery"), {
-  ssr: false,
-  loading: () => <div>Loading...</div>,
-});
+import { useRef } from "react";
+import ColorBar from "./color-bar";
 
 export default function HeroText() {
   const textRef = useRef<HTMLDivElement>(null);
-  const squareRef = useRef<HTMLDivElement>(null);
-  const [showGallery, setShowGallery] = useState(false);
 
   useGSAP(
     () => {
@@ -20,20 +13,12 @@ export default function HeroText() {
         type: "chars, lines",
         autoSplit: true,
       });
-
       const ghost = SplitText.create("#split-ghost", {
         type: "chars, lines",
         autoSplit: true,
       });
 
-      // Main text animation
-      gsap.from(main.lines, {
-        xPercent: -50,
-        duration: 2,
-        ease: "power3.out",
-      });
-
-      // Ghost animation (slightly delayed)
+      gsap.from(main.lines, { xPercent: -50, duration: 2, ease: "power3.out" });
       gsap.from(ghost.lines, {
         xPercent: -50,
         duration: 2,
@@ -44,41 +29,14 @@ export default function HeroText() {
     { scope: textRef }
   );
 
-  useGSAP(
-    () => {
-      if (!squareRef.current) return;
-
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: "#hero",
-            start: "top top",
-            end: "+=800",
-            scrub: true,
-            pin: true,
-            onEnter: () => setShowGallery(true),
-          },
-        })
-        // Move text slightly to the right
-        .to("#split", { x: "5vw", ease: "none" }, 0)
-        .to("#split-ghost", { x: "5vw", ease: "none" }, 0)
-        // Fade out text while fading in square
-        .to("#split", { autoAlpha: 0, duration: 0.5 }, 0)
-        .to("#split-ghost", { autoAlpha: 0, duration: 0.5 }, 0)
-        .to(
-          squareRef.current,
-          { autoAlpha: 1, scale: 1, duration: 0.5, ease: "power3.out" },
-          0
-        );
-    },
-    { scope: textRef }
-  );
-
   return (
-    <>
+    <div
+      id="hero"
+      className="relative h-screen overflow-hidden flex items-center justify-center"
+    >
       <div
         ref={textRef}
-        className="pointer-events-none z-10 fixed flex w-screen justify-center"
+        className="pointer-events-none fixed flex w-screen justify-center"
       >
         <span
           id="split-ghost"
@@ -86,7 +44,6 @@ export default function HeroText() {
         >
           SUKUU
         </span>
-
         <span
           id="split"
           className="uppercase text-[10rem] font-bold tracking-tight skew-x-6 text-black relative"
@@ -94,12 +51,18 @@ export default function HeroText() {
           SUKUU
         </span>
       </div>
-      <div
-        ref={squareRef}
-        className="h-[90vh] w-[90vw] fixed bg-green-500 opacity-0 scale-0 z-9999"
-      >
-        {showGallery && <Gallery />}
+
+      <div className="fixed w-full flex flex-col items-center justify-center -z-10">
+        <ColorBar initialX="10%" finalX="30%" color="green" height="22" />
+        <ColorBar
+          initialX="-10%"
+          finalX="28%"
+          color="blue"
+          duration={2}
+          width="3/5"
+        />
+        <ColorBar initialX="20%" finalX="32%" color="orange" height="22" />
       </div>
-    </>
+    </div>
   );
 }
