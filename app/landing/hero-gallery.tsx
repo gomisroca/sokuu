@@ -1,3 +1,5 @@
+"use client";
+
 import { useGSAP, gsap } from "@/gsap/setup";
 import { useRef } from "react";
 
@@ -7,6 +9,12 @@ export default function HeroGallery() {
   useGSAP(() => {
     const sections = gsap.utils.toArray<HTMLElement>("#gallery-section");
 
+    const fadeInOffset = 75; // vh per section for fade-in
+    const fadeOutOffset = 150; // vh per section for fade-out
+    const fadeDistance = 200; // how far each fade happens
+    const fadeOutDelay = 1000; // extra scroll before fade-out starts
+
+    // Fade-in sections (staggered)
     sections.forEach((section, index) => {
       gsap.fromTo(
         section,
@@ -17,21 +25,45 @@ export default function HeroGallery() {
           ease: "power2.out",
           scrollTrigger: {
             trigger: "#gallery-trigger",
-            start: `top+=${index * 75}vh 85%`,
-            end: `+=50vh`,
+            start: `top+=${index * fadeInOffset}vh 85%`,
+            end: `+=${fadeDistance}vh`,
             scrub: true,
           },
         }
       );
     });
+
+    // Fade-out sections (reverse order, gradual)
+    sections
+      .slice()
+      .reverse()
+      .forEach((section, index) => {
+        gsap.to(section, {
+          autoAlpha: 0,
+          scale: 0.85,
+          ease: "power2.in",
+          scrollTrigger: {
+            trigger: "#gallery-trigger",
+            start: `top+=${
+              sections.length * fadeInOffset +
+              fadeOutDelay +
+              index * fadeOutOffset
+            }vh 85%`,
+            end: `+=${fadeDistance}vh`,
+            scrub: true,
+          },
+        });
+      });
   });
 
   return (
     <>
-      <div id="gallery-trigger" className="h-screen" />
+      {/* Tall trigger to allow scroll for all fade-ins and fade-outs */}
+      <div id="gallery-trigger" className="h-[1000vh]" />
+
       <div
         ref={galleryRef}
-        className="flex flex-row w-screen h-screen m-auto fixed justify-center"
+        className="flex flex-row w-screen h-screen fixed justify-center"
       >
         <div
           id="gallery-section"
