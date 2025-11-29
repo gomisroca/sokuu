@@ -49,6 +49,8 @@ export default function GallerySection1() {
       { opacity: 1, filter: "blur(0.5px)", duration: 2 },
       0
     );
+
+    return () => tl.kill();
   });
 
   return (
