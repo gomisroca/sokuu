@@ -7,10 +7,14 @@ import { useRef, useState } from "react";
 const GallerySection1 = dynamic(() => import("./section-1"), {
   ssr: false,
 });
+const GallerySection2 = dynamic(() => import("./section-2"), {
+  ssr: false,
+});
 
 export default function HeroGallery() {
   const galleryRef = useRef<HTMLDivElement>(null);
-  const [showGallerySection1, setShowGallerySection1] = useState(false);
+  const [showSection1, setShowSection1] = useState(false);
+  const [showSection2, setShowSection2] = useState(false);
 
   useGSAP(() => {
     const sections = gsap.utils.toArray<HTMLElement>("#gallery-section");
@@ -32,7 +36,11 @@ export default function HeroGallery() {
             end: `+=${scrollDistance}vh`,
             scrub: true,
             onEnter:
-              index === 0 ? () => setShowGallerySection1(true) : undefined,
+              index === 0
+                ? () => setShowSection1(true)
+                : index === 1
+                ? () => setShowSection2(true)
+                : undefined,
           },
         }
       );
@@ -52,14 +60,14 @@ export default function HeroGallery() {
           id="gallery-section"
           className="flex-1 flex items-center justify-center bg-orange-500 overflow-hidden"
         >
-          {showGallerySection1 && <GallerySection1 />}
+          {showSection1 && <GallerySection1 />}
         </div>
 
         <div
           id="gallery-section"
           className="flex-1 flex items-center justify-center bg-sky-500"
         >
-          <Image fill src="https://picsum.photos/900?2" alt="Gallery 2" />
+          {showSection2 && <GallerySection2 />}
         </div>
 
         <div
