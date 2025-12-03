@@ -47,25 +47,25 @@ export default function HeroGallery() {
 
       <div
         ref={galleryRef}
-        className="flex flex-row w-screen h-screen fixed justify-center"
+        className="group flex flex-row w-screen h-screen fixed justify-center"
       >
         <div
           id="gallery-section"
-          className="flex-1 flex items-center justify-center bg-orange-500 overflow-hidden"
+          className="w-1/3 hover:w-1/2 transition-all duration-200 ease-in-out flex items-center justify-center bg-orange-500 overflow-hidden"
         >
           {shownSections.includes(0) && <GallerySection1 />}
         </div>
 
         <div
           id="gallery-section"
-          className="flex-1 flex items-center justify-center bg-sky-500"
+          className="w-1/3 hover:w-1/2 transition-all duration-200 ease-in-out flex items-center justify-center bg-sky-500 overflow-hidden"
         >
           {shownSections.includes(1) && <GallerySection2 />}
         </div>
 
         <div
           id="gallery-section"
-          className="flex-1 flex items-center justify-center bg-rose-500"
+          className="w-1/3 hover:w-1/2 transition-all duration-200 ease-in-out flex items-center justify-center bg-rose-500"
         >
           {shownSections.includes(2) && (
             <Image fill src="https://picsum.photos/900?3" alt="Gallery 3" />
