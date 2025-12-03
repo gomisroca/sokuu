@@ -54,7 +54,7 @@ export default function GallerySection1() {
   });
 
   return (
-    <div className=" flex items-center justify-center h-full">
+    <div className="flex items-center justify-center h-full">
       <div
         ref={bgRef}
         className="w-160 h-160 border-8 border-blue-500 rounded-sm pointer-events-none"
@@ -65,7 +65,7 @@ export default function GallerySection1() {
       />
       <span
         ref={textRef}
-        className="text-6xl uppercase fixed font-extrabold p-10 text-shadow-lg/30 text-center"
+        className="min-w-140 text-6xl uppercase fixed font-extrabold p-10 text-shadow-lg/30 text-center"
       >
         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
       </span>
