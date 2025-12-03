@@ -13,8 +13,7 @@ const GallerySection2 = dynamic(() => import("./section-2"), {
 
 export default function HeroGallery() {
   const galleryRef = useRef<HTMLDivElement>(null);
-  const [showSection1, setShowSection1] = useState(false);
-  const [showSection2, setShowSection2] = useState(false);
+  const [shownSections, setShownSections] = useState<number[]>([]);
 
   useGSAP(() => {
     const sections = gsap.utils.toArray<HTMLElement>("#gallery-section");
@@ -35,12 +34,7 @@ export default function HeroGallery() {
             start: `top+=${index * scrollInOffset}vh 85%`,
             end: `+=${scrollDistance}vh`,
             scrub: true,
-            onEnter:
-              index === 0
-                ? () => setShowSection1(true)
-                : index === 1
-                ? () => setShowSection2(true)
-                : undefined,
+            onEnter: () => setShownSections((prev) => [...prev, index]),
           },
         }
       );
@@ -49,7 +43,6 @@ export default function HeroGallery() {
 
   return (
     <>
-      {/* Tall trigger to allow scroll for all fade-ins and fade-outs */}
       <div id="gallery-trigger" className="h-[1000vh]" />
 
       <div
@@ -60,21 +53,23 @@ export default function HeroGallery() {
           id="gallery-section"
           className="flex-1 flex items-center justify-center bg-orange-500 overflow-hidden"
         >
-          {showSection1 && <GallerySection1 />}
+          {shownSections.includes(0) && <GallerySection1 />}
         </div>
 
         <div
           id="gallery-section"
           className="flex-1 flex items-center justify-center bg-sky-500"
         >
-          {showSection2 && <GallerySection2 />}
+          {shownSections.includes(1) && <GallerySection2 />}
         </div>
 
         <div
           id="gallery-section"
           className="flex-1 flex items-center justify-center bg-rose-500"
         >
-          <Image fill src="https://picsum.photos/900?3" alt="Gallery 3" />
+          {shownSections.includes(2) && (
+            <Image fill src="https://picsum.photos/900?3" alt="Gallery 3" />
+          )}
         </div>
       </div>
     </>
