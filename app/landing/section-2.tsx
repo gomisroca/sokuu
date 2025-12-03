@@ -3,41 +3,67 @@
 import { useGSAP, gsap, SplitText } from "@/gsap/setup";
 import { useRef } from "react";
 
-export default function TextWave() {
-  const textRef = useRef<HTMLDivElement>(null);
+export default function GallerySection2() {
+  const textRef = useRef<HTMLSpanElement>(null);
+
+  const texts = [
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+  ];
 
   useGSAP(() => {
-    const split = SplitText.create(textRef.current, {
-      type: "chars",
-    });
+    let index = 0;
 
-    const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+    let split = SplitText.create(textRef.current, { type: "chars" });
 
-    tl.fromTo(
-      split.chars,
-      {
-        scale: 1,
-      },
-      {
-        scale: 1.15,
-        duration: 0.6,
-        ease: "power3.out",
-        stagger: 0.05,
-      }
-    ).to(split.chars, {
-      scale: 1,
-      duration: 0.25,
-      ease: "power2.out",
-    });
+    const runAnimation = () => {
+      const tl = gsap.timeline({
+        yoyo: true,
+        repeat: 0,
+        repeatDelay: 2,
+        onComplete: () => {
+          split.revert();
 
-    return () => tl.kill();
+          index = (index + 1) % texts.length;
+          textRef.current!.textContent = texts[index];
+
+          split = SplitText.create(textRef.current, { type: "chars" });
+
+          runAnimation();
+        },
+      });
+
+      tl.fromTo(
+        split.chars,
+        {
+          opacity: 0.6,
+          filter: "blur(2px)",
+          duration: 2,
+          ease: "power3.out",
+          stagger: 0.15,
+        },
+        {
+          opacity: 1,
+          filter: "blur(0px)",
+          duration: 2,
+          ease: "power3.out",
+          stagger: 0.15,
+        }
+      );
+    };
+
+    runAnimation();
+
+    return () => split.revert();
   });
 
   return (
-    <div className="text-6xl font-extrabold p-10">
-      <div ref={textRef}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      </div>
-    </div>
+    <span
+      ref={textRef}
+      className="min-w-140 text-6xl uppercase fixed font-extrabold p-10 text-shadow-lg/30 text-center"
+    >
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    </span>
   );
 }
