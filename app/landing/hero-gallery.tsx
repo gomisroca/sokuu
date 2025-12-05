@@ -2,12 +2,14 @@
 
 import { useGSAP, gsap } from "@/gsap/setup";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { useRef, useState } from "react";
 const GallerySection1 = dynamic(() => import("./section-1"), {
   ssr: false,
 });
 const GallerySection2 = dynamic(() => import("./section-2"), {
+  ssr: false,
+});
+const GallerySection3 = dynamic(() => import("./section-3"), {
   ssr: false,
 });
 
@@ -67,9 +69,7 @@ export default function HeroGallery() {
           id="gallery-section"
           className="w-1/3 hover:w-1/2 transition-all duration-200 ease-in-out flex items-center justify-center bg-rose-500"
         >
-          {shownSections.includes(2) && (
-            <Image fill src="https://picsum.photos/900?3" alt="Gallery 3" />
-          )}
+          {shownSections.includes(2) && <GallerySection3 />}
         </div>
       </div>
     </>
