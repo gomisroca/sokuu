@@ -15,7 +15,7 @@ export default function GallerySection3() {
       x: "random([-1000, 1000])",
       y: "random([-1000, 1000])",
       opacity: 0,
-      ease: "expo.inOut",
+      ease: "steps.inOut",
       duration: 1.25,
       onComplete: () => {
         // After initial animation, replace specific words
@@ -57,7 +57,7 @@ export default function GallerySection3() {
             x: gsap.utils.random(-1000, 1000),
             y: gsap.utils.random(-1000, 1000),
             opacity: 0,
-            ease: "expo.in",
+            ease: "elastic.inOut",
             duration: 0.8,
             delay: delay,
             onComplete: () => {
@@ -77,7 +77,7 @@ export default function GallerySection3() {
                     x: 0,
                     y: 0,
                     opacity: 1,
-                    ease: "expo.out",
+                    ease: "elastic.inOut",
                     duration: 1,
                   }
                 );
