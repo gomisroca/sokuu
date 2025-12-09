@@ -10,7 +10,18 @@ export default function GallerySection3() {
 
     const split = SplitText.create(h1Ref.current, { type: "words, lines" });
 
-    // Animate words flying in randomly from all directions
+    // Rotations
+    const firstRotation = ["Made", "Built", "Meant"];
+    const lastRotation = ["Web", "User", "World"];
+
+    let firstIndex = 0;
+    let lastIndex = 0;
+
+    // Word elements
+    const firstWord = split.words[0];
+    const lastWord = split.words[split.words.length - 1];
+
+    // Initial animation for all words
     gsap.from(split.words, {
       x: "random([-1000, 1000])",
       y: "random([-1000, 1000])",
@@ -18,77 +29,63 @@ export default function GallerySection3() {
       ease: "steps.inOut",
       duration: 1.25,
       onComplete: () => {
-        // After initial animation, replace specific words
-        replaceWords(split);
+        cycleFirstWord();
+        cycleLastWord();
+
+        intervalFirst = setInterval(cycleFirstWord, 2000);
+        intervalLast = setInterval(cycleLastWord, 2000);
       },
     });
 
-    interface WordReplacement {
-      newWord: string;
-      element: Element | null;
-      index: number;
-    }
+    let intervalFirst: ReturnType<typeof setInterval> | null = null;
+    let intervalLast: ReturnType<typeof setInterval> | null = null;
 
-    type WordReplacements = Record<string, WordReplacement>;
+    function animateSwap(element: Element, newText: string) {
+      gsap.to(element, {
+        x: gsap.utils.random(-1000, 1000),
+        y: gsap.utils.random(-1000, 1000),
+        opacity: 0,
+        ease: "elastic.inOut",
+        duration: 0.7,
+        onComplete: () => {
+          element.textContent = newText;
 
-    function replaceWords(split: SplitText) {
-      // Find the words to replace by their content
-      const wordToReplace: WordReplacements = {
-        Made: { newWord: "Built", element: null, index: 0 },
-        Web: { newWord: "User", element: null, index: 4 },
-      };
-
-      // Map the words to their elements
-      split.words.forEach((word, i) => {
-        const text = word.textContent?.trim() ?? "";
-        if (text in wordToReplace) {
-          wordToReplace[text].element = word;
-          wordToReplace[text].index = i;
-        }
-      });
-
-      // Animate each word replacement
-      Object.entries(wordToReplace).forEach(([oldWord, data], i) => {
-        if (data.element) {
-          const delay = 1.5 + i * 0.3; // Stagger the replacements
-
-          // Fly out the old word
-          gsap.to(data.element, {
-            x: gsap.utils.random(-1000, 1000),
-            y: gsap.utils.random(-1000, 1000),
-            opacity: 0,
-            ease: "elastic.inOut",
-            duration: 0.8,
-            delay: delay,
-            onComplete: () => {
-              // Change the text
-              if (data.element) {
-                data.element.textContent = data.newWord;
-
-                // Fly in the new word
-                gsap.fromTo(
-                  data.element,
-                  {
-                    x: gsap.utils.random(-1000, 1000),
-                    y: gsap.utils.random(-1000, 1000),
-                    opacity: 0,
-                  },
-                  {
-                    x: 0,
-                    y: 0,
-                    opacity: 1,
-                    ease: "elastic.inOut",
-                    duration: 1,
-                  }
-                );
-              }
+          gsap.fromTo(
+            element,
+            {
+              x: gsap.utils.random(-1000, 1000),
+              y: gsap.utils.random(-1000, 1000),
+              opacity: 0,
             },
-          });
-        }
+            {
+              x: 0,
+              y: 0,
+              opacity: 1,
+              ease: "elastic.inOut",
+              duration: 0.9,
+            }
+          );
+        },
       });
     }
 
-    return () => split.revert();
+    function cycleFirstWord() {
+      const newText = firstRotation[(firstIndex + 1) % firstRotation.length];
+      animateSwap(firstWord, newText);
+      firstIndex = (firstIndex + 1) % firstRotation.length;
+    }
+
+    function cycleLastWord() {
+      const newText = lastRotation[(lastIndex + 1) % lastRotation.length];
+      animateSwap(lastWord, newText);
+      lastIndex = (lastIndex + 1) % lastRotation.length;
+    }
+
+    return () => {
+      if (intervalFirst) clearInterval(intervalFirst);
+      if (intervalLast) clearInterval(intervalLast);
+      split.revert();
+    };
   });
 
   return (
@@ -96,7 +93,9 @@ export default function GallerySection3() {
       ref={h1Ref}
       className="min-w-140 text-6xl uppercase fixed font-extrabold p-10 text-shadow-lg/30 text-center"
     >
-      Made with Love for the Web
+      <span className="block">Made</span>
+      <span className="block">for the</span>
+      <span className="block">Web</span>
     </h1>
   );
 }
